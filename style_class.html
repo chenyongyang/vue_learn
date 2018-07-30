@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>动态绑定样式</title>
+	<style type="text/css">
+		.x{
+			background-color: gray;
+		}
+		.y{
+			color: white;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<div :class="{x:flag,y:true}">这是一个块</div>
+		<div :class="{class1,class1}">这是一个块</div>
+		<div :class="[class1,class2]">这是一个块</div>
+	</div>
+	<script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript">
+		/*
+			动态绑定样式常见的有四种情况：
+			1、绑定class：对象写法；数组写法
+			2、绑定style行内样式：对象写法；数组写法
+		 */
+		let vm = new Vue({
+			el:'#app',
+			data:{
+				flag:true,
+				class1:'x',
+				class2:'y',
+			}
+		})
+	</script>
+</body>
+</html>

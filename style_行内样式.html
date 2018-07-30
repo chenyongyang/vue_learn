@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>动态绑定样式</title>
+</head>
+<body>
+	<div id="app">
+		<!-- 对象写法 -->
+		<div :style="{fontSize: '30px',color:'white',backgroundColor:'gray'}">这是一个块</div>
+		<!-- 数组写法 -->
+		<div :style="[style1,style2,{backgroundColor:'blue'}]">这是一个块</div>
+	</div>
+	<script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript">
+		let vm = new Vue({
+			el:'#app',
+			data:{
+				style1:{fontSize: '30px'},
+				style2:{color:'white'},
+				style3:{backgroundColor:'gray'}
+			}
+		})
+	</script>
+</body>
+</html>

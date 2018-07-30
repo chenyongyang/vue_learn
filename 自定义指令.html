@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>自定义指令</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .a {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            background-color: red
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <button v-color="flag">变色</button>
+        <div v-drag class="a"></div>
+        <div v-drag class="a"></div>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            directives: { //操作dom
+                drag(el) {
+                    el.onmousedown = function(e) {
+                        var disX = e.pageX - el.offsetLeft;
+                        var disY = e.pageY - el.offsetTop;
+                        document.onmousemove = function(e) {
+                            el.style.left = e.pageX - disX + 'px';
+                            el.style.top = e.pageY - disY + 'px';
+                        };
+                        document.onmouseup = function() {
+                            document.onmousemove = document.onmouseup = null;
+                        };
+                        e.preventDefault();
+                    }
+                },
+                color(el, bindings) { //el指代的是button按钮，bindings是一个存储指令的表达式和表达式的值的对象，可以用打印出arguments查看
+                    el.style.background = bindings.value;
+                }
+            },
+            data: {
+                flag: 'red',
+            }
+        })
+    </script>
+</body>
+
+</html>

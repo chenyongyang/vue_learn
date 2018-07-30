@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>watch</title>
+</head>
+<body>
+	<div id="app">
+		<input type="text" v-model='val'>
+		<p>
+			{{ fullName }}
+		</p>
+	</div>
+	<script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript">
+		let vm = new Vue({
+			el:'#app',
+			data:{
+				firstName: 'firstName',
+				lastName: 'lastName',
+				fullName: '',
+				val: ''
+			},
+			watch:{ 
+				//只监听val值的变化，firstName和lastName的变化不会引起响应式变化
+				
+				val(newVal){
+					this.fullName = this.firstName+'---'+newVal+'---'+this.lastName;
+				},
+				//若要实现同时监听三者的变化，则需要分别写；如果有很多的值，则需要写很多
+				//因此针对这种情况，一般采用计算属性
+				firstName(newVal){},
+				lastName(newVal){}
+			}
+		})
+		//第二种写法：命令式写法
+		vm.$watch('val',(newVal)=>{
+			vm.fullName = vm.firstName+'---'+newVal+'---'+vm.lastName;
+		},)
+	</script>
+</body>
+</html>

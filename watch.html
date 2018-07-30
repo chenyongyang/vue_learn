@@ -19,17 +19,18 @@
 				a:'',
 				msg:''
 			},
-			watch:{
-				a(){
+			watch:{ //watch主要应用于异步操作
+				a(newVal,oldVal){ //设置中间状态
+					this.msg = '审核中...'
 					setTimeout(()=>{
-						if(this.a.length<3){
-							this.msg = 'short'
-						}else if(this.a.length>5){
-							this.msg = 'long'
-						}else{
-							this.msg = ''
-						}						
-					},2000);
+						if(newVal.length<3){
+							return this.msg = '少了';
+						}
+						if(newVal.length>5){
+							return this.msg = '多了';
+						}
+						this.msg = '';
+					},1000);
 				}
 			}
 		})
