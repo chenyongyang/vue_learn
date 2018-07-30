@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>watch</title>
+</head>
+<body>
+	<div id="app">
+		<input type="text" v-model='a'>
+		<p>
+			{{ msg }}
+		</p>
+	</div>
+	<script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript">
+		new Vue({
+			el:'#app',
+			data:{
+				a:'',
+				msg:''
+			},
+			watch:{
+				a(){
+					setTimeout(()=>{
+						if(this.a.length<3){
+							this.msg = 'short'
+						}else if(this.a.length>5){
+							this.msg = 'long'
+						}else{
+							this.msg = ''
+						}						
+					},2000);
+				}
+			}
+		})
+	</script>
+</body>
+</html>

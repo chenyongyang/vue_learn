@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue filter</title>
+</head>
+<body>
+	<div id="app">
+		{{ msg | my }}
+	</div>
+	<div id="app2">
+		{{ msg | my }}
+	</div>
+	<script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript">
+		Vue.filter('my',function(data){
+			return data.split('')
+		})
+		var vm1 = new Vue({
+			el:'#app',
+			data:{
+				msg:'hello'
+			},
+			// filters:{
+			// 	my(data){
+			// 		return data.split('')
+			// 	}
+			// }
+		});
+
+		var vm2 = new Vue({
+			el:'#app2',
+			data:{
+				msg:'hello'
+			},
+			// filters:{
+			// 	my(data){
+			// 		return data.split('')
+			// 	}
+			// }
+		});		
+	</script>
+</body>
+</html>

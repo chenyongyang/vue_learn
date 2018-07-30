@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>计算属性 get方法</title>
+</head>
+<body>
+	<div id="app">
+		<input type="text" v-model="val">{{ tip }}
+	</div>
+	<script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript">
+		new Vue({
+			el:'app',
+			data:{
+				val:'',
+			},
+			computed:{
+				tip:{
+					get(){
+						if(this.val.length > 10){
+							return '输入的内容太长了';
+						}else if(this.val.length <3){
+							return '输入的内容太短了';
+						}else{
+							return '合格';
+						}
+					},
+					set(){
+
+					}
+				}
+			}
+		})
+	</script>
+</body>
+</html>

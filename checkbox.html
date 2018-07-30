@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div id="app">
+		全选 <input type="checkbox">
+		{{ val }} <input type="checkbox" v-for="val in arr">
+	</div>
+	<script type="text/javascript" src="./node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:'#app',
+			data:{
+				isSelected: true,
+				arr:[1,2,3]
+			}
+		})
+	</script>
+</body>
+</html>

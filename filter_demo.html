@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		.res{
+			border: 1px solid black;
+			width: 150px;
+			height: 20px;
+			color: blue;
+		}
+		.res:hover{
+			background-color: blue;
+			color: white;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<input type="text" v-model="val">{{ val }}
+		<!-- {{ val.split('') }} -->
+		<div class="res" v-for='item in res'>
+			{{ item }}
+		</div>
+		<!-- <button @click='test'>test</button> -->
+	</div>
+	<script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript">
+		/*
+			计算属性一定要有返回值，它并不是一个函数，因此如果没有返回值，只是修改了源数据，也是无法显示数据的
+		 */
+		let app = new Vue({
+			el:'#app',
+			data:{
+				val:'',
+				arr:['a' ,'a','a' ,'a', 'b', 'c', 'b', 'a', 'a'],
+			},
+			computed:{
+				//splice导致数组塌陷，从而不能够完全实现数组去重
+				res1(){
+					let temp = [];
+					
+					if(this.val != ''){
+						
+						temp = this.arr.slice();
+						
+						for(let i = 0;i < temp.length;i++){
+
+							let item = temp[i];
+
+							if(item.indexOf(this.val) != -1){
+
+								temp.splice(i,1)
+							}							
+						}
+						
+					}else{
+
+						temp = this.arr.slice();
+					}
+
+					return temp;
+				},
+				//为了解决示例一，采用倒序来遍历数组
+				res2(){
+					let temp = [];
+					console.log(this.val)
+					if(this.val != ''){
+						console.log(1)
+						temp = this.arr.slice();
+						let index = temp.length - 1;
+						while(index >= 0){
+							if(temp[index].indexOf(this.val) != -1){
+								temp.splice(index,1);
+							}
+							index--;
+						}
+					}else{
+						console.log(2)
+						temp = this.arr.slice();
+					}
+					return temp;
+				},
+				//Array.filter 这个函数返回一个新数组，问题就在于没有设置一个变量接收filter之后的结果数组
+				//之前也有设置一个临时变量来接收返回值，但是这里注意一个问题：数组是引用类型，因此如果过程中修改了临时变量，那么data同样被修改
+				//这个写法也存在一定的问题：最后得到的结果是最后一个过滤的结果，无法实现一层一层筛选的效果，解法见示例二
+				res3(){
+					let strArr = this.val.split('');
+					let temp = this.arr;
+					strArr.forEach(item=>{
+						temp = this.arr.filter(item2=>{
+							return item2.indexOf(item) != -1;
+						});
+					})
+					return temp;
+				},
+
+				//示例二
+				//正解决了示例一的问题，splice删除了数组某一项，就能够实现一层一层筛选的效果，但是splice会导致数组塌陷
+				res4(){
+					let strArr = this.val.split('');
+					let temp = [];
+					for (let i = 0; i < this.arr.length; i++) {
+						temp[i] = this.arr[i];
+					}
+					strArr.forEach(item=>{
+						temp.forEach(item2=>{
+							if(item2.indexOf(item) == -1){
+								temp.splice(item2,1);
+							}
+						})
+					})
+
+					console.log(temp)	
+					return temp;
+				},
+
+				res5(){
+					let strArr = this.val.split('');
+					let temp = [];
+					for (let i = 0; i < this.arr.length; i++) {
+						temp[i] = this.arr[i];
+					}
+					let index = temp.length-1;
+
+					while(index >= 0){
+						strArr.forEach(item=>{
+							if(temp[index].indexOf(item) == -1){
+								temp.splice(index,1);
+							}
+						});
+						index--;
+					}
+					
+
+				// 	console.log(temp)	
+				// 	return temp;
+				// }
+
+
+				//以下写法存在的问题：
+				//filter返回一个新数组，但是这里并没有设置变量接收返回值
+				//计算属性没有返回值
+				// res(){
+				// 	let strArr = this.val.split('');
+				// 	strArr.forEach(item=>{ //forEach相当于给数组的每个元素执行相同的函数
+				// 		this.arr.filter(item2=>{ //
+				// 			return item2.indexOf(item) != -1;
+				// 		});
+				// 	});
+				// }
+
+				//以下写法存在的问题：
+				//数据处理过程中修改了根实例的源数据，应创建一个临时变量作为中介
+				// res(){
+				// 	let strArr = this.val.split('');
+				// 	strArr.forEach(item=>{ //forEach相当于给数组的每个元素执行相同的函数
+				// 		this.arr = this.arr.filter(item2=>{ //filter返回一个新数组，但是这里并没有设置变量接收返回值
+				// 			return item2.indexOf(item) != -1;
+				// 		});
+				// 	});
+				// 	return this.arr;
+				// }
+			},
+		})
+	</script>
+</body>
+</html>

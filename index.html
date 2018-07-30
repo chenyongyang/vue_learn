@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div id="app">
+		<div @click.capture='parent'>parent
+			<div @click='children'>children
+				<div @click='grandson'>grandson</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="./node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:'#app',
+			methods:{
+				//取消事件冒泡的传统方式，在vue中用事件修饰符.stop
+				parent(){console.log('parent')},
+				children(e){
+					console.log('children');
+					//e.cancelBubble = true;
+				},
+				grandson(e){
+					console.log('grandson');
+					//e.stopPropagation();
+				}
+			},
+			data:{
+			}
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>计算属性的不足</title>
+</head>
+<body>
+	<div id="app">
+		<input type="text" v-model="a">
+		<p>
+			{{ msg }}
+		</p>
+	</div>
+	<script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:'#app',
+			data:{
+				a:''
+			},
+			computed:{
+				msg(){//计算属性不支持异步，此时应该用watch
+					setTimeout(()=>{
+						if(this.a.length<3){
+							return 'short';
+						}else if(this.a.length>5){
+							return 'long'
+						}else{
+							return ''
+						}						
+					},2000);
+				}
+			}
+		})
+		
+	</script>
+</body>
+</html>

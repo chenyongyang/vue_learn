@@ -1,0 +1,8 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "vue": "^2.5.16"
+  }
+}

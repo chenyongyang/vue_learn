@@ -1,0 +1,87 @@
+checkbox
+如果是复选框，只有一个复选框的时候，会把此值转化为布尔值，如果true则代表选中
+如果是多个checkbox，要增加value属性并且数据类型是数组
+
+select
+如果value属性不写，默认取的是option中的值
+如果select是多选框，则数据类型是数组类型
+
+radio
+通过v-model进行分组的，value值对应的就是选择后的结果
+
+加了v-model,checked、selected就无效了
+
+修饰符处理细节
+v-model修饰符 .number .lazy
+按键修饰符 .enter .ctrl .keyCode
+事件修饰符
+once
+e.srcElement && e.target判断事件源绑定事件
+
+局部过滤器，全局过滤器（放在页面的顶部）
+
+方法不会有缓存，计算属性会根据依赖（归vue管理的数据，可以响应式变化）的属性进行缓存
+由两部分组成get和set，不能只写set
+一般情况下，通过js赋值影响其他值或者表单元素设置值的时候会调用set方法
+
+根据其他的值算出的结果，用get方法；改它自己的时候，影响其他人，用set方法
+computed:{
+	checkAll{
+		get(){ //返回什么结果，就会赋给checkAll属性
+			return this.products.every(item=>item.isSelected)
+		},
+		set(val){ //val是给checkAll赋值的时候传递过来的
+			this.products.forEach(item=>item.isSelected = val)
+		}
+	}
+}
+
+
+vue做的很多是后台管理系统，因此表单元素很重要
+
+
+v-cloak解决块闪烁问题，需要加样式，如[v-cloak]:{display:none}
+
+v-on事件写在methods中，this指向根实例，不能使用箭头函数
+
+数组删除使用filter 不要使用splice 后者会导致数组塌陷
+
+v-model有两个功能，一个是将数据读取出来，调用get方法；另一个是将输入框的值设置到数据中，调用set方法
+
+如果计算属性写成函数，默认调用get方法
+
+v-if操作的是dom，v-show操作的是样式
+如果频繁切换dom使用v-show
+当数据一开始就确定下来使用v-if
+
+
+v-for默认会复用原有的dom元素，如果加了不同的key，将key绑定随机数，就不会复用
+
+forEach,for in,for of,for的区别
+
+filter用于删除数组中的某些值
+map用于更新数组的值
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
