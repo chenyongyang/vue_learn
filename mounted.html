@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mounted</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 挂载完成：把DOM和数据编译好后，放到页面上 -->
+        <p ref="myp">{{ msg }}</p>
+        <div ref="wrap">
+            <div v-for="a in arr" ref="mydiv">{{a}}</div>
+        </div>
+
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        /*
+                                                                                                                                                                                                                                                                                                                                                                                                                    this.$el    当前挂载元素
+                                                                                                                                                                                                                                                                                                                                                                                                                    this.$data  根实例的数据
+                                                                                                                                                                                                                                                                                                                                                                                                                    this.$set   后加属性实现响应式变化
+                                                                                                                                                                                                                                                                                                                                                                                                                    this.$watch 外部设置数据监听
+                                                                                                                                                                                                                                                                                                                                                                                                                    this.$option    vm上所有的属性
+                                                                                                                                                                                                                                                                                                                                                                                                                    this.$nextTick(() => { // 异步方法，保证DOM渲染完后再获取vm
+                                                                                                                                                                                                                                                                                                                                                                                                                        console.log(vm);
+                                                                                                                                                                                                                                                                                                                                                                                                                    })
+                                                                                                                                                                                                                                                                                                                                                                                                                    this.$refs  设置了ref属性的元素集合
+                                                                                                                                                                                                                                                                                                                                                                                                                */
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'hello',
+                arr: [1, 2, 3],
+            },
+            mounted() {
+                //获取p标签的内容
+                console.log(document.getElementById('app').innerHTML); // 这种方法过于繁琐
+                //更简便的方法：给元素设置ref属性，vue中this.$refs存储所有设置了ref的元素
+                //this.$refs.xxx 
+                //如果dom元素不是通过v-for循环处理的，只能获取一个，通过v-for循环出来的可以获取n个
+                console.log(this.$refs.myp);
+                console.log(this.$refs.mydiv);
+                //如何获取vm变量的值
+                //console.log(vm); // undefined，因为整个过程还没执行完，需要异步
+                setTimeout(() => { // 通过定时器，渲染完后就能获取到vm，显然渲染的时间不好把控，使用Vue提供的异步接口
+                    console.log(vm);
+                }, 30);
+                this.$nextTick(() => { // 异步方法，保证DOM渲染完后再执行里面的回调
+                    console.log(vm);
+                });
+
+                this.arr = [1, 2, 3, 4];
+                console.log(this.$refs.wrap); // 打印4个div
+                console.log(this.$refs.wrap.children.length); //打印只有3个子节点
+                //原因就是DOM映射，数据改变了，过会视图会更新，这是映射出来的
+                //debugger; // 观察断点位置，发现只渲染3个div
+                //刷新这个过程、DOM渲染是异步的，刚刚把数据改掉，视图刷新需要时间，但是代码继续往下走，因此代码拿到的是之前的视图
+                //我们希望拿到的是数据更新后的视图结果，那就要等待DOM渲染完之后才来获取，因此用this.$nextTick()
+                this.$nextTick(() => { // 如果数据变化后想要获取真实DOM的内容，需要等待页面渲染完毕后再去获取，所有的DOM操作最好放在nextTick中
+                    console.log(this.$refs.wrap); // 这时就显示有4个子节点了
+                    debugger;
+                });
+                //如果想改变数据，马上取到最新的结果，一定要加上nextTick
+            },
+            mounted() {
+                /*
+                    更新了数据，想要马上对新的视图进行操作，这是最佳实践
+                */
+                this.arr = [1, 2, 3];
+                this.$nextTick(() => {
+                    console.log(this.$refs.wrap);
+                });
+            },
+        })
+    </script>
+</body>
+
+</html>

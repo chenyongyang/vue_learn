@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>嵌套组件</title>
+</head>
+
+<body>
+    <div id="app">
+        <parent></parent>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let grandson = {
+            template: '<div>grandson</div>'
+        };
+        let son = {
+            template: '<div>son<grandson></grandson></div>',
+            components: {
+                grandson
+            }
+        };
+        let parent = {
+            template: '<div>parent<son></son></div>',
+            components: {
+                son
+            }
+        };
+
+        let vm = new Vue({
+            components: {
+                parent
+            }
+        }).$mount('#app');
+    </script>
+</body>
+
+</html>

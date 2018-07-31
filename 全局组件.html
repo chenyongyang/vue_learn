@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>全局组件</title>
+</head>
+
+<body>
+    <!-- 分类：页面级组件：1、一个页面是一个组件；2、将可复用部分抽离出来 基础组件 -->
+    <div id="app">
+        <my-test></my-test>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        //全局组件：写插件
+        // 用法：全局组件 声明一次在任何地方使用 局部组件：必须告诉这个组件属于谁
+        // 1、组件名只支持首字母大写，多个单词用-
+        // 2、html采用短横线隔开命名法 js中驼峰命名
+        Vue.component('my-test', { // 一个对象可以看成一个组件
+            template: '<div>{{ msg }}</div>',
+            data() { // 组件中的数据必须是函数类型，返回一个实例作为组件的数据
+                return {
+                    msg: 'test'
+                }
+            }
+        });
+        new Vue().$mount('#app');
+    </script>
+</body>
+
+</html>

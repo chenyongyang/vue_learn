@@ -37,7 +37,7 @@
                         </div>
                         <div class="panel-body">
                             <ul class="list-group">
-                                <li class="list-group-item" v-for="(todo,index) in todos" @dblclick="remember(todo)">
+                                <li class="list-group-item" v-for="(todo,index) in filterTodos" @dblclick="remember(todo)">
                                     <span :class="{del:todo.isCompleted}" v-show="cur!=todo">
                                         <input type="checkbox" v-model="todo.isCompleted">
                                         <span @dblclick="isDoubleClick = true" >{{ todo.content }}</span>
@@ -49,14 +49,14 @@
                         </div>
                         <div class="panel-footer">
                             <ul class="nav nav-pills">
-                                <li role="presentation">
-                                    <a href="#">全部完成</a>
+                                <li role="presentation" :class="{active:hash==='all'}">
+                                    <a href="#/all">全部完成</a>
                                 </li>
-                                <li role="presentation">
-                                    <a href="#">已完成</a>
+                                <li role="presentation" :class="{active:hash==='finish'}">
+                                    <a href="#/finish">已完成</a>
                                 </li>
-                                <li role="presentation">
-                                    <a href="#">未完成</a>
+                                <li role="presentation" :class="{active:hash==='unfinish'}">
+                                    <a href="#/unfinish">未完成</a>
                                 </li>
                             </ul>
                         </div>

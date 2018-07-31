@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>局部组件</title>
+</head>
+
+<body>
+    <div id="app">
+        <component1></component1>
+        <component2></component2>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        // 局部组件使用三步曲：1、创建组件；2、注册组件；3、使用组件
+        // 自闭合标签可以写入属性；半闭合标签不可写入属性
+        // 组件是相互独立的，不能直接跨作用域
+        // 根实例也是一个组件，根实例有的属性，组件都可以有（生命周期函数）
+        // 如果组件共用了数据，会导致同时更新；可用函数返回对象来解决
+        // 子组件不能直接使用父组件的数据（组件间的数据交互）
+        // 组件理论上可以无限嵌套
+        let component1 = {
+            template: `<div @click="fn">{{ msg }}</div>`,
+            data() {
+                return {
+                    msg: '组件一'
+                }
+            },
+            methods: {
+                fn() {
+                    this.msg = 'hello'
+                }
+            }
+        };
+        let component2 = {
+            template: `<div>{{ msg }}</div>`,
+            data() {
+                return {
+                    msg: '组件二'
+                }
+            }
+        };
+        let vm = new Vue({
+            components: {
+                component1,
+                component2
+            }
+        }).$mount('#app');
+    </script>
+</body>
+
+</html>

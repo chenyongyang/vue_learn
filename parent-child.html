@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>父传递子</title>
+</head>
+
+<body>
+    <div id="app">
+        父亲：{{ parentMoney }}
+        <!-- 普通属性的值为字符串，加了冒号的属性值为js对应的值（1为数值，true为布尔等） -->
+        <child :child-money="parentMoney"></child>
+        <!-- 以下这属于不传属性，只写属性名不写属性值会报错 -->
+        <child></child>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            data: {
+                parentMoney: 200
+            },
+            components: {
+                child: {
+                    props: { // 对象的形式可以校验，数组的不可以
+                        // 属性名和data中的属性不能同名，校验时不能阻断代码的指向，只是警告而言
+                        childMoney: {
+                            type: [Number],
+                            //default: 0, // 可以给m赋予默认值，如果不传默认会调用default
+                            required: true, // 此属性是必须传递，但是不能和default同用
+                            // 一般只用到type、default、required这三种
+                            // 更加高级的校验：使用自定义校验器
+                            validator(val) { // 第一个参数是当前传递的值，返回true表示通过，false则不通过
+                                return val > 300;
+                            }
+                        }
+                    },
+                    // props: ['child-money'],
+                    template: '<div>儿子：{{ childMoney }}</div>'
+                }
+            },
+        }).$mount('#app');
+    </script>
+</body>
+
+</html>
