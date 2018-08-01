@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>父组件调用子组件的methods</title>
+</head>
+
+<body>
+    <div id="app">
+        <loading ref="load"></loading>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        // 父组件调用子组件的方法
+        let loading = {
+            data() {
+                return {
+                    flag: true,
+                }
+            },
+            template: '<div v-show="flag">疯狂加载中...</div>',
+            methods: {
+                hide() {
+                    this.flag = false;
+                }
+            }
+        };
+        let vm = new Vue({
+            components: {
+                loading,
+            },
+            mounted() { // ref放在组件上，获取到的是组件的实例，并不是组件的DOM元素，一般用于写插件
+                // 通过这种方式，实现父组件调用了子组件的方法，属性同理
+                //this.$refs.load.hide();
+                // 更改子组件的样式
+                this.$refs.load.$el.style.color = 'red';
+
+            }
+        }).$mount('#app');
+    </script>
+</body>
+
+</html>

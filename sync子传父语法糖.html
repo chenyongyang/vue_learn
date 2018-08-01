@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>emit</title>
+</head>
+
+<body>
+    <div id="app">
+        父亲：{{ parentMoney }}
+        <!-- <child :m="parentMoney" @update:m="val => parentMoney = val"></child> -->
+        <child :child-money.sync="parentMoney"></child>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let child = {
+            template: `<div>儿子：{{ childMoney }} 
+                            <button @click="fn">更改价格</button>
+                        </div>`,
+            props: ['child-money'],
+            methods: {
+                fn() {
+                    this.$emit('update:childMoney', 800); // 触发自己的自定义事件
+                }
+            }
+        }
+        let vm = new Vue({
+            // template: `<div>父亲：{{<child :child-money="parentMoney"></child></div>`,
+            data: {
+                parentMoney: 200
+            },
+            components: {
+                child,
+            },
+            methods: {
+                // fn(val) {
+                //     this.parentMoney = val;
+                // }
+            }
+        }).$mount('#app');
+    </script>
+</body>
+<!-- 
+    1、子组件订阅（监听）自定义事件this.$on，触发父组件的回调函数
+    2、子组件通过事件发射自定义事件this.$emit，并传递数据给父组件
+    3、父组件在回调中处理来自子组件的数据，更新自身数据，子组件随之更新
+    子组件说：这个钱改成800
+    父组件接收到这个消息，行吧，那就改成800吧（触发回调）
+    父组件数据更改，子组件随之更改（数据单向流动，父组件————>子组件）
+ -->
+
+</html>

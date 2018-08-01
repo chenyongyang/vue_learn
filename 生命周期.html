@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>生命周期</title>
+</head>
+
+<body>
+    <!-- 导入：子组件和父组件同时拥有mounted方法，会先走谁？ -->
+    <div id="app">
+        <!-- ref属性要放到组件上，模板上的ref属性无效 -->
+        <child ref="child"></child>
+    </div>
+    <template id="child">
+        <div>
+            <li v-for="a in arr">{{ a }}</li>
+        </div>
+    </template>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        // 需要等待子组件挂载完成后再触发父组件的挂载
+        let vm = new Vue({
+            mounted() {
+                // 父组件取到子组件的内容               
+                console.log(this.$refs.child.$el.innerHTML); // 取到数据更新前的
+                this.$nextTick(() => {
+                    console.log(this.$refs.child.$el.innerHTML); // 取到数据更新后的
+                });
+                // 写mounted一定要加nextTick，因为无法保证子组件是否操作异步数据
+            },
+            components: {
+                child: {
+                    template: '#child',
+                    data() {
+                        return {
+                            arr: [1, 2, 3],
+                        }
+                    },
+                    mounted() {
+                        this.arr = [4, 5, 6];
+                    }
+                }
+            }
+        }).$mount('#app');
+    </script>
+</body>
+
+</html>

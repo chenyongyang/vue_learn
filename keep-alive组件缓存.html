@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>keep-alive组件缓存</title>
+</head>
+
+<body>
+    <div id="app">
+        <input type="radio" v-model="which" value="one">one
+        <input type="radio" v-model="which" value="two">two
+        <!-- 切换组件时，组件会销毁 消耗性能 需要将组件缓存下来 用keep-alive-->
+        <!-- 一般用作缓存，这一点对路由很重要 -->
+        <!-- 如果缓存了，就不会走created、mounted等钩子函数 -->
+        <keep-alive>
+            <component :is="which"></component>
+        </keep-alive>
+
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let one = {
+            template: '<div>one</div>',
+            beforeDestroy() {
+                console.log('组件销毁');
+            }
+        };
+        let two = {
+            template: '<div>two</div>',
+            beforeDestroy() {
+                console.log('组件销毁');
+            }
+        };
+        let vm = new Vue({
+            data: {
+                which: 'one'
+            },
+            components: {
+                one,
+                two
+            }
+        }).$mount('#app');
+    </script>
+</body>
+
+</html>

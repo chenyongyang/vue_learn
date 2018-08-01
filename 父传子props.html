@@ -14,7 +14,7 @@
         <!-- 普通属性的值为字符串，加了冒号的属性值为js对应的值（1为数值，true为布尔等） -->
         <child :child-money="parentMoney"></child>
         <!-- 以下这属于不传属性，只写属性名不写属性值会报错 -->
-        <child></child>
+        <!-- <child></child> -->
     </div>
     <script src="node_modules/vue/dist/vue.js"></script>
     <script>
@@ -38,7 +38,7 @@
                         }
                     },
                     // props: ['child-money'],
-                    template: '<div>儿子：{{ childMoney }}</div>'
+                    template: '<div>儿子：{{ childMoney }} <button @click="childMoney = 800">更改价格</button></div>'
                 }
             },
         }).$mount('#app');

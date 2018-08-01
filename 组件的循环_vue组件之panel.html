@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue组件之panel</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- 组件也可以v-for渲染 -->
+        <panel :type="article.type" @show-title="showTitle" v-for="(article,index) in articles" :key="index">
+            <div slot="title"><span v-html="article.title"></span></div>
+            <div slot="content">{{ article.content }}</div>
+            <!-- 数据中有的有作者，有的没有 -->
+            <div v-if="article.auth">{{ article.auth }}</div>
+        </panel>
+        <!-- <panel type="primary"></panel> -->
+        <!-- <panel type="danger"></panel> -->
+        <!-- 没传递属性时，用默认样式 -->
+        <!-- <panel></panel> -->
+    </div>
+    <template id="panel">
+        <!-- 
+            绑定class样式两种方式：用对象存放，用数组存放
+            对象用true或false来控制样式
+            数组用样式名是否放入来控制样式
+         -->
+        <!-- 
+            这里也可以用字符串拼接的方式
+            <div class="panel" :class="['panel-'+type]">
+         -->
+        <div class="panel" :class="[color]">
+            <div class="panel-heading" ref="head">
+                <slot name="title">
+                    这里是默认标题
+                </slot>
+            </div>
+            <div class="panel-body">
+                <slot name="content">
+                    这里是默认内容
+                </slot>
+            </div>
+            <div class="panel-footer">
+                <slot>
+                    匿名
+                </slot>
+                <button @click="showTitle">点我说标题</button>
+            </div>
+        </div>
+    </template>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                articles: [{
+                    type: 'warning',
+                    title: '<h1>vue</h1>',
+                    content: '这是一篇关于vue的文章',
+                    auth: '作者：xxx'
+                }, {
+                    type: 'primary',
+                    title: '<h1>react</h1>',
+                    content: '这是一篇关于react的文章',
+                }, {
+                    type: 'danger',
+                    title: '<h1>angular</h1>',
+                    content: '这是一篇关于angular的文章',
+                }, ]
+            },
+            methods: {
+                showTitle(val) {
+                    console.log(val)
+                }
+            },
+            components: {
+                panel: {
+                    template: '#panel',
+                    computed: { // 也可以定义一个data属性并用props属性来初始化值
+                        color() {
+                            return 'panel-' + this.type;
+                        }
+                    },
+                    props: {
+                        type: {
+                            type: [String],
+                            default: 'default'
+                        }
+                    },
+                    methods: {
+                        showTitle() {
+                            this.$emit('show-title', this.$refs.head.innerText);
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
