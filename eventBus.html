@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>eventBus</title>
+</head>
+
+<body>
+    <div id="app">
+        <brother1></brother1>
+        <brother2></brother2>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        // EventBus：同级组件、隔级组件的数据传递，原理为发布订阅模式
+        let EventBus = new Vue; // 用于继承自vue实例的$on和$emit方法
+        let brother1 = {
+            template: '<div>{{ color }} <button @click="changeGreen">变绿</button></div>',
+            created() {
+                EventBus.$on('changeRed', (val) => {
+                    this.color = val;
+                })
+            },
+            data() {
+                return {
+                    color: '绿色',
+                    old: '绿色'
+                }
+            },
+            methods: {
+                changeGreen() {
+                    EventBus.$emit('changeGreen', this.old);
+                }
+            }
+        };
+        let brother2 = {
+            template: '<div>{{ color }} <button @click="changeRed">变红</button></div>',
+            created() {
+                EventBus.$on('changeGreen', val => {
+                    this.color = val;
+                })
+            },
+            data() {
+                return {
+                    color: '红色',
+                    old: '红色'
+                }
+            },
+            methods: {
+                changeRed() {
+                    EventBus.$emit('changeRed', this.old);
+                }
+            }
+        };
+        let vm = new Vue({
+            el: '#app',
+            components: {
+                brother1,
+                brother2
+            }
+        })
+    </script>
+</body>
+
+</html>

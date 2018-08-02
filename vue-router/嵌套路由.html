@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>嵌套路由</title>
+</head>
+
+<body>
+    <!-- 
+        子路由路径不要带'/'
+     -->
+    <div id="app">
+        <router-link to="/home">首页</router-link>
+        <!-- 
+            详情页中嵌套二级路由，二级路由的router-link和router-view应该定义在对应的模板中
+         -->
+        <router-link to="/detail">详情页</router-link>
+        <router-view></router-view>
+    </div>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script src="../node_modules/vue-router/dist/vue-router.js"></script>
+    <script>
+        let home = {
+            template: '<div>home</div>'
+        };
+        let detail = {
+            template: `<div>
+                <router-link to="/detail/profile">个人中心</router-link>
+                <router-link to="/detail/about">关于我</router-link>
+                <router-view></router-view>
+                </div>`
+        };
+        let profile = {
+            template: '<div>profile</div>'
+        };
+        let about = {
+            template: '<div>about</div>'
+        };
+        let routes = [{
+            path: '/home',
+            component: home,
+        }, {
+            path: '/detail',
+            component: detail,
+            children: [ // children中的路径永远不带/，/表示根路径，带/表示1级路由
+                {
+                    path: 'profile',
+                    component: profile
+                }, {
+                    path: 'about',
+                    component: about
+                }
+            ]
+        }];
+        let router = new VueRouter({
+            routes,
+        })
+        let vm = new Vue({
+            el: '#app',
+            router
+        })
+    </script>
+</body>
+
+</html>

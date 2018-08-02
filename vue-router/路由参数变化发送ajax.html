@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>路由参数变化发送ajax</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 给组件绑定原生事件要用 .native 事件修饰符 -->
+        <router-link :to="{name:'goods',params:{index:id}}" v-for="(id,index) in goodsId" :key="index" @click.native="info">商品{{ id }}</router-link>
+        <!-- 如果用对象作为to的属性，并且使用了参数，必须给路由起个名字，通过名字跳转 -->
+        <!-- <router-link :to="{name:'goods',params:{index:1,index2:'a'}}">商品1</router-link>
+        <router-link to="/goods/2/b">商品2</router-link>
+        <router-link to="/goods/3/c">商品3</router-link> -->
+        <router-view></router-view>
+    </div>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script src="../node_modules/vue-router/dist/vue-router.js"></script>
+    <script>
+        let goods = {
+            template: '<div>商品{{ $route.params.index }}</div>',
+            // 每个组件都有$route和$router这两个属性
+            watch: {
+                $route(to) {
+                    // 模拟将路由参数发送给服务器
+                    /*
+                        一般开发都是这个思路：
+                            无论是文章列表还是商品列表，点击每一项变化的只是后面部分参数
+                            前端取到这个变化的参数，将其通过ajax发送给后端
+                            后端根据这个参数去数据库获取数据并返回前端
+                            前端在回调中将数据渲染到视图上
+                    */
+                    // 这个不同的参数从何而来？数据肯定从后端而来，后端先给前端一组goodsID的数据                
+                    console.log(to, '发送给服务器' + this.$route.params.index);
+                }
+            }
+        };
+        let home = {
+            template: '<div>首页</div>'
+        };
+        let routes = [{
+                path: '',
+                component: home
+            },
+            // #/goods/1/a 用正则匹配出一个对象，并存储到this.$route.params
+            {
+                path: '/goods/:index', // 路径参数表示值必须要有，但值是随机的
+                component: goods,
+                name: 'goods'
+            }
+        ];
+        let router = new VueRouter({
+            routes
+        })
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                // 
+                goodsId: [1, 2, 3]
+            },
+            router,
+            methods: { // 组件绑定原生事件 .native事件修饰符
+                info() {
+                    console.log(this.$route)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

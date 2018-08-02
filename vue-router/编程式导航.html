@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>编程式导航</title>
+    <style>
+        .active {
+            color: red
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- to属性可以动态绑定，就可以在其中拼接字符串了 -->
+        <router-link :to="{path:'/home'}">首页</router-link>
+        <router-link :to="{path:'/list'}">列表页</router-link>
+        <!-- router-view是一个全局组件，可以直接使用 -->
+        <router-view></router-view>
+    </div>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script src="../node_modules/vue-router/dist/vue-router.js"></script>
+    <script>
+        let home = {
+            template: '<div>首页<button @click="toList">去列表页</button></div>',
+            methods: { // 编程式路由可用于在模板中通过js跳转路由
+                toList() {
+                    this.$router.push('/list'); // 强制跳转路径
+                    // this.$router.replace('/list'); // 路由替换 将当前的路由替换掉
+                }
+            }
+        };
+        let list = {
+            template: '<div>列表页<button @click="goBack">返回</button></div>',
+            methods: {
+                goBack() {
+                    this.$router.go(-1); // 返回某一级 go顶替了back
+                }
+            }
+        };
+        let routes = [{
+                path: '', // 默认展示的路由
+                component: home
+            }, { // 路由的映射表 配置路径和组件的关系
+                path: '/home',
+                component: home
+            }, { // 配置的关系就是页面级组件
+                path: '/list', // 路径必须加/
+                component: list
+            },
+            //  {
+            //     path: '*', // 通配符，无论路径写什么都能匹配，但是路径不变，只是更换组件
+            //     component: list
+            // }, 
+            {
+                path: '*',
+                redirect: '/home' // 路径变，组件也变 通常用于404
+            }
+        ];
+        let router = new VueRouter({ // 引入vue-router自带VueRouter类
+            // routes: routes 键名和值名相同可简写
+            // mode: 'history', h5模式
+            routes,
+            linkActiveClass: 'active' // 更改默认样式的类名 默认叫router-link-active
+        });
+        let vm = new Vue({
+            el: '#app',
+            components: {
+                home,
+                list
+            },
+            // router: router 键名和值名相同可简写。
+            router, // 每个组件都会有一个$router属性（里面是方法）；还有一个$route（代表属性）
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>嵌套组件</title>
+    <link rel="stylesheet" href="node_modules/animate.css/animate.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- 切换组件是，组件会销毁 -->
+        <router-link to="/home">首页</router-link>
+        <router-link to="/list">列表页</router-link>
+        <!--  mode="out-in" 动画的模式-->
+        <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
+            <!-- 要缓存谁 就把谁包起来即可 -->
+            <keep-alive>
+                <!-- 如果动画想要在同一平面内就需要定位 -->
+                <router-view style="position: absolute; top: 30px;left:0;width:100%;"></router-view>
+            </keep-alive>
+        </transition>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/vue-router/dist/vue-router.js"></script>
+    <script>
+        let home = {
+            template: `<div style="backgroundColor:lightblue">首页</div>`
+        };
+        let list = {
+            template: `<div style="backgroundColor:lightblue">列表页</div>`
+        };
+        let routes = [{
+            path: '/home',
+            component: home
+        }, {
+            path: '/list',
+            component: list
+        }];
+        let router = new VueRouter({
+            routes
+        })
+        let vm = new Vue({
+            el: '#app',
+            router
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue-router</title>
+    <style>
+        .active {
+            color: red
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- to属性值与路由映射表中的path保持一致 -->
+        <!-- tag属性默认为a标签，可以更改 -->
+        <router-link to="/home" tag="button">首页</router-link>
+        <router-link to="/list">列表页</router-link>
+        <!-- router-view是一个全局组件，可以直接使用 -->
+        <router-view></router-view>
+    </div>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script src="../node_modules/vue-router/dist/vue-router.js"></script>
+    <script>
+        let home = {
+            template: '<div>首页</div>'
+        };
+        let list = {
+            template: '<div>列表页</div>'
+        };
+        let routes = [{ // 路由的映射表 配置路径和组件的关系
+            path: '/home',
+            component: home
+        }, { // 配置的关系就是页面级组件
+            path: '/list', // 路径必须加/
+            component: list
+        }];
+        let router = new VueRouter({ // 引入vue-router自带VueRouter类
+            // routes: routes 键名和值名相同可简写
+            // mode: 'history', h5模式
+            routes,
+            linkActiveClass: 'active' // 更改默认样式的类名 默认叫router-link-active
+        });
+        let vm = new Vue({
+            el: '#app',
+            components: {
+                home,
+                list
+            },
+            // router: router 键名和值名相同可简写。
+            router
+        });
+    </script>
+</body>
+
+</html>
